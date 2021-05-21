@@ -9,10 +9,17 @@ public class MineSweeper {
 
     private Square[][] grid;
     private int minesNb;
+    private boolean isBlank;
 
-    public MineSweeper(Dificulty dificulty, Window window) {
+    /**
+     * Create a new model for the game
+     * @param difficulty The difficulty of the game
+     * @param window The view
+     */
+    public MineSweeper(Dificulty difficulty, Window window) {
         ///// Generate new grid following difficulty parameter given
-        switch (dificulty) {
+        isBlank = true;
+        switch (difficulty) {
             case EASY -> {
                 grid = new Square[10][10];
                 minesNb = 10;
@@ -26,9 +33,6 @@ public class MineSweeper {
                 minesNb = 100;
             }
         }
-
-        ///// Create new controller to listen all minesweeper square
-        SquareController controller = new SquareController(window,this);
 
         ///// Fill in the grid with non occupied square and set the position value in relation to the edges
         Square tmpSquare;
@@ -57,14 +61,17 @@ public class MineSweeper {
                 } else {
                     tmpSquare = new Square(i, j, Square.Pos.CENTERED);
                 }
-                tmpSquare.addActionListener(controller);
-                tmpSquare.addMouseListener(controller);
+                window.setSquareController(tmpSquare);
+                window.addSquare(tmpSquare);
                 grid[i][j] = tmpSquare;
-
             }
         }
 
         ///// Define random mined squares
 
+    }
+
+    public boolean isBlank() {
+        return isBlank;
     }
 }
